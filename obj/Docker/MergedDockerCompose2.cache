@@ -1,0 +1,87 @@
+name: dockercompose2002714765299078169
+services:
+  lojamanoel:
+    build:
+      context: C:\Users\User\source\repos\LojaManoel
+      dockerfile: LojaManoel/Dockerfile
+    depends_on:
+      migrate:
+        condition: service_started
+        required: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=LojaSeuManoel;User Id=sa;Password=avaliacaotecnica;TrustServerCertificate=true;
+    image: lojamanoel
+    networks:
+      app-network: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "5000"
+        protocol: tcp
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\User\AppData\Roaming/Microsoft/UserSecrets
+        target: /home/app/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\User\AppData\Roaming/Microsoft/UserSecrets
+        target: /root/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\User\AppData\Roaming/ASP.NET/Https
+        target: /home/app/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\User\AppData\Roaming/ASP.NET/Https
+        target: /root/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+  migrate:
+    build:
+      context: C:\Users\User\source\repos\LojaManoel
+      dockerfile: LojaManoel/Dockerfile
+    command:
+      - dotnet
+      - LojaManoel.dll
+      - --migrate
+    depends_on:
+      sqlserver:
+        condition: service_started
+        required: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=LojaSeuManoel;User Id=sa;Password=avaliacaotecnica;TrustServerCertificate=true;
+    networks:
+      app-network: null
+  sqlserver:
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: avaliacaotecnica
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    networks:
+      app-network: null
+    ports:
+      - mode: ingress
+        target: 1433
+        published: "1433"
+        protocol: tcp
+networks:
+  app-network:
+    name: dockercompose2002714765299078169_app-network

@@ -1,0 +1,28 @@
+[
+  {
+    "ContainingType": "LojaManoel.Controllers.LojaController",
+    "Method": "GetPedido",
+    "RelativePath": "Loja",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "root",
+        "Type": "LojaManoel.Models.Root",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LojaManoel.Controllers.LojaController",
+    "Method": "Test",
+    "RelativePath": "Loja",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]
